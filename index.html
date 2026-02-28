@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Rivas – IT Infrastructure Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: #1e2330;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --green: #00ff88;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --danger: #f43f5e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow orbs */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,12,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+  }
+
+  nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-logo::before {
+    content: '>';
+    color: var(--green);
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  header {
+    padding: 6rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,255,136,0.08);
+    border: 1px solid rgba(0,255,136,0.2);
+    color: var(--green);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span {
+    display: block;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    max-width: 580px;
+    margin-bottom: 2rem;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.8rem;
+    border-radius: 2px;
+    font-size: 0.78rem;
+    color: var(--text);
+  }
+
+  .meta-pill .icon { color: var(--accent); font-size: 0.9rem; }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0,212,255,0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+    max-width: 200px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+
+  .stat-item {
+    background: var(--surface);
+    padding: 1.2rem 1.5rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── PROJECT CARDS ── */
+  .projects-grid {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .project-card {
+    background: var(--surface);
+    padding: 1.8rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+    transition: background 0.2s;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .project-card:hover { background: var(--surface2); }
+
+  .project-card:hover .project-arrow { opacity: 1; transform: translateX(0); }
+
+  .project-icon {
+    width: 42px; height: 42px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .project-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+
+  .project-desc {
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    color: var(--accent);
+    border-radius: 2px;
+    letter-spacing: 0.04em;
+  }
+
+  .tag.purple {
+    background: rgba(124,58,237,0.1);
+    border-color: rgba(124,58,237,0.25);
+    color: #a78bfa;
+  }
+
+  .tag.green {
+    background: rgba(0,255,136,0.08);
+    border-color: rgba(0,255,136,0.2);
+    color: var(--green);
+  }
+
+  .tag.orange {
+    background: rgba(251,146,60,0.08);
+    border-color: rgba(251,146,60,0.25);
+    color: #fb923c;
+  }
+
+  .project-arrow {
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: all 0.2s;
+    font-size: 1.1rem;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.4rem;
+  }
+
+  .skill-group-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    font-size: 0.82rem;
+  }
+
+  .skill-bar-bg {
+    width: 80px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .skill-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--accent2), var(--accent));
+    border-radius: 2px;
+    animation: growBar 1.2s ease forwards;
+    transform-origin: left;
+  }
+
+  @keyframes growBar { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+  /* ── TECH STACK ── */
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .stack-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+
+  .stack-item:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .stack-item span { color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── TERMINAL BLOCK ── */
+  .terminal {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .terminal-bar {
+    background: var(--surface);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.red { background: #f43f5e; }
+  .dot.yellow { background: #fbbf24; }
+  .dot.green { background: #34d399; }
+
+  .terminal-body {
+    padding: 1.2rem 1.5rem;
+    font-size: 0.8rem;
+    line-height: 2;
+  }
+
+  .t-comment { color: #4a5568; }
+  .t-cmd { color: var(--green); }
+  .t-arg { color: var(--accent); }
+  .t-str { color: #fbbf24; }
+  .t-out { color: var(--muted); }
+  .t-cursor::after {
+    content: '█';
+    color: var(--green);
+    animation: blink 1s step-end infinite;
+  }
+
+  /* Fade in */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.2s; }
+  .fade-up:nth-child(3) { animation-delay: 0.3s; }
+  .fade-up:nth-child(4) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="#" class="nav-logo">francisco-rivas-hub</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="https://github.com/francisco-rivas-hub/IT-Portfolio" target="_blank">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <div class="status-badge fade-up">
+      <span class="status-dot"></span>
+      Available for opportunities
+    </div>
+    <h1 class="fade-up">
+      Francisco Rivas
+      <span>IT Support Specialist</span>
+    </h1>
+    <p class="hero-subtitle fade-up">
+      Onsite IT Specialist with 18 months of hands-on enterprise experience executing Windows deployment,
+      Active Directory remediation, network operations, and HiTrust compliance in live production BPO environments.
+      Currently pursuing a Cybersecurity technician certification.
+    </p>
+    <div class="hero-meta fade-up">
+      <div class="meta-pill"><span class="icon">⚙</span> IT Support Specialist — Onsite</div>
+      <div class="meta-pill"><span class="icon">🏢</span> BPO Enterprise — 7+ Campaigns</div>
+      <div class="meta-pill"><span class="icon">🔒</span> HiTrust Compliance Officer (Onsite)</div>
+      <div class="meta-pill"><span class="icon">🧪</span> Home Lab — WinServer 2012 DC</div>
+    </div>
+    <div class="hero-cta fade-up">
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio" target="_blank" class="btn btn-primary">
+        → View Full Portfolio
+      </a>
+      <a href="https://github.com/francisco-rivas-hub" target="_blank" class="btn btn-ghost">
+        ↗ GitHub Profile
+      </a>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="container">
+    <div class="section-label">// about</div>
+    <h2>What I Do</h2>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-comment"># francisco-rivas-hub — On-Site Infrastructure Engineer</span></div>
+        <div><span class="t-cmd">$ whoami</span></div>
+        <div><span class="t-out">→ IT Support Specialist | Onsite IT | HiTrust Compliance Officer</span></div>
+        <div><span class="t-cmd">$ cat role.txt</span></div>
+        <div><span class="t-out">→ Critical link between physical on-site infrastructure and remote global admins</span></div>
+        <div><span class="t-cmd">$ cat scope.txt</span></div>
+        <div><span class="t-arg">OS Deployment</span>     <span class="t-str">"Win11, DISM, Sysprep, WinPE, UEFI:NTFS, pnputil"</span></div>
+        <div><span class="t-arg">Identity & IAM</span>    <span class="t-str">"Active Directory, GPO, DUO MFA, Entra ID, PowerShell"</span></div>
+        <div><span class="t-arg">Networking</span>        <span class="t-str">"Cisco Catalyst, VLANs, 802.1X NAC, PDU Rack"</span></div>
+        <div><span class="t-arg">Security</span>          <span class="t-str">"CrowdStrike, BitLocker, HP Sure Start, PKI/TLS"</span></div>
+        <div><span class="t-arg">HiTrust</span>           <span class="t-str">"11 exclusive controls + 22 shared — 11 security domains"</span></div>
+        <div><span class="t-arg">Automation</span>        <span class="t-str">"PostBootConfig.ps1, pnputil bulk injection, AppX audit"</span></div>
+        <div class="t-cursor"><span class="t-cmd">$ </span></div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-number">100+</span>
+        <span class="stat-label">Win11 Migrations</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">250+</span>
+        <span class="stat-label">Endpoints Managed</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">2,033</span>
+        <span class="stat-label">Tickets Handled</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">1,000+</span>
+        <span class="stat-label">Users Supported</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">11</span>
+        <span class="stat-label">Exclusive HiTrust Controls</span>
+      </div>
+    </div>
+
+    <p style="color:var(--muted); font-size:0.85rem; line-height:1.8;">
+      All case studies reflect hands-on execution in live production environments — not lab simulations.
+      Sensitive identifiers have been anonymized to protect organizational confidentiality.
+    </p>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="section-label">// projects</div>
+    <h2>Case Studies</h2>
+
+    <div class="projects-grid">
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/01-windows-11-migration" target="_blank" class="project-card">
+        <div class="project-icon">🪟</div>
+        <div>
+          <div class="project-name">Windows 11 Enterprise Migration</div>
+          <div class="project-desc">
+            30+ workstations migrated including legacy Dell OptiPlex 9010 using UEFI:NTFS v2.6
+            to bypass hardware requirements. Full BIOS configuration, patching, and zero-downtime scheduling.
+          </div>
+          <div class="project-tags">
+            <span class="tag">Windows 11</span>
+            <span class="tag">UEFI:NTFS</span>
+            <span class="tag">Legacy HW</span>
+            <span class="tag green">30+ Endpoints</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/02-active-directory-remediation" target="_blank" class="project-card">
+        <div class="project-icon">🗂</div>
+        <div>
+          <div class="project-name">Active Directory Remediation</div>
+          <div class="project-desc">
+            Resolved 6+ Trust Relationship failures via PowerShell domain rejoin, cleaned 25+ stale
+            AD objects, performed offline SAM reset, managed DUO MFA provisioning and Entra ID token repair.
+          </div>
+          <div class="project-tags">
+            <span class="tag">Active Directory</span>
+            <span class="tag purple">GPO / RSOP</span>
+            <span class="tag">DUO MFA</span>
+            <span class="tag">PowerShell</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/03-network-stability-vlan" target="_blank" class="project-card">
+        <div class="project-icon">🌐</div>
+        <div>
+          <div class="project-name">Network Stability & VLAN Governance</div>
+          <div class="project-desc">
+            Resolved 4+ VLAN incidents in a segmented multi-campaign environment. Physical Cisco Catalyst 3750
+            rack operations, CyberPower PDU monitoring, 802.1X NAC troubleshooting, and Grandstream VoIP deployment.
+          </div>
+          <div class="project-tags">
+            <span class="tag">Cisco Catalyst</span>
+            <span class="tag">VLAN</span>
+            <span class="tag">802.1X NAC</span>
+            <span class="tag green">PDU Rack</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/04-endpoint-security-compliance" target="_blank" class="project-card">
+        <div class="project-icon">🔒</div>
+        <div>
+          <div class="project-name">Endpoint Security & Compliance Validation</div>
+          <div class="project-desc">
+            CrowdStrike Falcon deployment (PSSecurityException resolved), BitLocker on 13+ endpoints,
+            HP Sure Start firmware hardening, PKI/TLS audit, AppLocker policy review, SFC repair.
+          </div>
+          <div class="project-tags">
+            <span class="tag">CrowdStrike</span>
+            <span class="tag purple">BitLocker</span>
+            <span class="tag">HP Sure Start</span>
+            <span class="tag">PKI / TLS</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/05-os-imaging-deployment-engineering" target="_blank" class="project-card">
+        <div class="project-icon">💿</div>
+        <div>
+          <div class="project-name">OS Imaging & Deployment Engineering</div>
+          <div class="project-desc">
+            Full imaging lifecycle: Macrium Reflect 21.81 GB master image, DISM Error 87 troubleshooting,
+            WinPE STRELEC offline deployment, pnputil bulk OEM driver injection for HP 800G4 fleet.
+          </div>
+          <div class="project-tags">
+            <span class="tag">DISM / Sysprep</span>
+            <span class="tag">Macrium Reflect</span>
+            <span class="tag orange">pnputil</span>
+            <span class="tag">WinPE</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/06-automation-scripting-powershell" target="_blank" class="project-card">
+        <div class="project-icon">⚙️</div>
+        <div>
+          <div class="project-name">Automation & PowerShell Scripting</div>
+          <div class="project-desc">
+            Developed PostBootConfig.ps1 — a multi-method campaign transition engine (winget → MSI → EXE → DisplayName).
+            4 production bugs identified, root-caused, and resolved. AppX audit pipeline built.
+          </div>
+          <div class="project-tags">
+            <span class="tag">PowerShell</span>
+            <span class="tag purple">PostBootConfig.ps1</span>
+            <span class="tag">Winget</span>
+            <span class="tag green">Bug Fixes ×4</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/07-hitrust-compliance-onsite" target="_blank" class="project-card">
+        <div class="project-icon">🛡️</div>
+        <div>
+          <div class="project-name">HiTrust Compliance — Onsite IT Officer</div>
+          <div class="project-desc">
+            Sole SPOC for 11 exclusive HiTrust controls + co-responsible for 22 more across 11 security domains.
+            Evidence submitted: BitLocker 13 endpoints, CCTV dual system, CO2 extinguisher, physical walkthroughs.
+          </div>
+          <div class="project-tags">
+            <span class="tag">HiTrust CSF</span>
+            <span class="tag purple">11 Exclusive Controls</span>
+            <span class="tag">Physical Security</span>
+            <span class="tag green">Compliance Officer</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/08-remote-management-infrastructure" target="_blank" class="project-card">
+        <div class="project-icon">🖧</div>
+        <div>
+          <div class="project-name">Remote Management & Infrastructure</div>
+          <div class="project-desc">
+            AnyDesk, TeamViewer, UltraVNC (service mode), NinjaRMM, and Intune for 7+ simultaneous campaigns.
+            Genesys VDI validation, Grandstream DP750 VoIP deployment, multi-platform CC stack management.
+          </div>
+          <div class="project-tags">
+            <span class="tag">AnyDesk / NinjaRMM</span>
+            <span class="tag">Intune</span>
+            <span class="tag orange">Genesys VDI</span>
+            <span class="tag">VoIP</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio/tree/main/09-homelab-sysadmin" target="_blank" class="project-card">
+        <div class="project-icon">🧪</div>
+        <div>
+          <div class="project-name">Home Lab — Windows Server & SysAdmin</div>
+          <div class="project-desc">
+            Self-built lab on HP EliteDesk 800 G4 — Windows Server 2012 DC (LAB-SRV-DC01), AD DS, DHCP scope,
+            DNS validation (lab.local), dcdiag 9/10 passed, Cisco SF110 switch, domain client enrolled.
+          </div>
+          <div class="project-tags">
+            <span class="tag">Windows Server 2012</span>
+            <span class="tag purple">AD DS / DHCP</span>
+            <span class="tag">dcdiag</span>
+            <span class="tag green">Self-Directed</span>
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="section-label">// skills</div>
+    <h2>Technical Expertise</h2>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">Systems & Deployment</div>
+        <div class="skill-item"><span>Windows 10/11 Enterprise</span><div class="skill-bar-bg"><div class="skill-bar" style="width:95%"></div></div></div>
+        <div class="skill-item"><span>DISM / Sysprep / WinPE</span><div class="skill-bar-bg"><div class="skill-bar" style="width:90%"></div></div></div>
+        <div class="skill-item"><span>BIOS / UEFI Management</span><div class="skill-bar-bg"><div class="skill-bar" style="width:88%"></div></div></div>
+        <div class="skill-item"><span>Windows Server / AD DS</span><div class="skill-bar-bg"><div class="skill-bar" style="width:75%"></div></div></div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Identity & IAM</div>
+        <div class="skill-item"><span>Active Directory</span><div class="skill-bar-bg"><div class="skill-bar" style="width:90%"></div></div></div>
+        <div class="skill-item"><span>Group Policy (GPO/RSOP)</span><div class="skill-bar-bg"><div class="skill-bar" style="width:87%"></div></div></div>
+        <div class="skill-item"><span>PowerShell Scripting</span><div class="skill-bar-bg"><div class="skill-bar" style="width:82%"></div></div></div>
+        <div class="skill-item"><span>DUO MFA / Entra ID</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div></div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Networking</div>
+        <div class="skill-item"><span>VLAN / Cisco Catalyst</span><div class="skill-bar-bg"><div class="skill-bar" style="width:88%"></div></div></div>
+        <div class="skill-item"><span>802.1X NAC</span><div class="skill-bar-bg"><div class="skill-bar" style="width:82%"></div></div></div>
+        <div class="skill-item"><span>DNS / DHCP</span><div class="skill-bar-bg"><div class="skill-bar" style="width:85%"></div></div></div>
+        <div class="skill-item"><span>PDU Rack / VoIP</span><div class="skill-bar-bg"><div class="skill-bar" style="width:78%"></div></div></div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Security & Compliance</div>
+        <div class="skill-item"><span>CrowdStrike Falcon</span><div class="skill-bar-bg"><div class="skill-bar" style="width:87%"></div></div></div>
+        <div class="skill-item"><span>BitLocker / TPM</span><div class="skill-bar-bg"><div class="skill-bar" style="width:90%"></div></div></div>
+        <div class="skill-item"><span>HiTrust CSF</span><div class="skill-bar-bg"><div class="skill-bar" style="width:85%"></div></div></div>
+        <div class="skill-item"><span>PKI / TLS / Certutil</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div></div>
+      </div>
+    </div>
+
+    <br>
+    <div class="section-label" style="margin-top:1rem;">// tech stack</div>
+    <div class="stack-list">
+      <div class="stack-item"><span>◆</span> PowerShell</div>
+      <div class="stack-item"><span>◆</span> Windows Server 2012</div>
+      <div class="stack-item"><span>◆</span> Active Directory</div>
+      <div class="stack-item"><span>◆</span> CrowdStrike Falcon</div>
+      <div class="stack-item"><span>◆</span> BitLocker</div>
+      <div class="stack-item"><span>◆</span> Cisco Catalyst / IOS-XE</div>
+      <div class="stack-item"><span>◆</span> DISM / Sysprep</div>
+      <div class="stack-item"><span>◆</span> Macrium Reflect</div>
+      <div class="stack-item"><span>◆</span> WinPE / STRELEC</div>
+      <div class="stack-item"><span>◆</span> Intune / NinjaRMM</div>
+      <div class="stack-item"><span>◆</span> HiTrust CSF</div>
+      <div class="stack-item"><span>◆</span> HP Sure Start</div>
+      <div class="stack-item"><span>◆</span> pnputil</div>
+      <div class="stack-item"><span>◆</span> AnyDesk / TeamViewer</div>
+      <div class="stack-item"><span>◆</span> GitHub Pages</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://francisco-rivas-hub.github.io/">Portfolio Site</a>
+      <a href="https://github.com/francisco-rivas-hub/IT-Portfolio">IT-Portfolio Repo</a>
+      <a href="https://github.com/francisco-rivas-hub">GitHub Profile</a>
+    </div>
+    <p>Maintained and updated as infrastructure experience evolves. &nbsp;·&nbsp; Francisco Rivas © 2026</p>
+  </div>
+</footer>
+
+</body>
+</html>
